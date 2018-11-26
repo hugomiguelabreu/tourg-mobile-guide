@@ -12,29 +12,29 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Explore',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-globe${focused ? '' : '-outline'}`
+          : 'md-globe'
       }
     />
   ),
 };
 
-const LinksStack = createStackNavigator({
+const MapStack = createStackNavigator({
   Links: LinksScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+MapStack.navigationOptions = {
+  tabBarLabel: 'Map',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-map' : 'md-map'}
     />
   ),
 };
@@ -53,8 +53,23 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+const AccountStack = createStackNavigator({
+    Account: SettingsScreen,
+});
+
+AccountStack.navigationOptions = {
+    tabBarLabel: 'Account',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-contact' : 'md-contact'}
+        />
+    ),
+};
+
 export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+    HomeStack,
+    MapStack,
+    SettingsStack,
+    AccountStack,
 });

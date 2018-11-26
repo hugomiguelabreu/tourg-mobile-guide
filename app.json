@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "tourg-mobile",
-    "description": "A very interesting project.",
-    "slug": "tourg-mobile",
+    "name": "tourg",
+    "description": "Your instant guide",
+    "slug": "tourg",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],
