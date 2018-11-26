@@ -51,14 +51,6 @@ export default class LoginScreen extends React.Component {
                 </TouchableOpacity>
             </View>
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
@@ -67,9 +59,10 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#349D88',
   },
   contentContainer: {
+    flex:1,
     paddingTop: 30,
   },
   buttonLogin:{
@@ -77,10 +70,13 @@ const styles = StyleSheet.create({
   },
   textInput:{
     marginBottom: 25,
+    backgroundColor:'transparent',
   },
   welcomeContainer: {
+      flex: 1,
       flexDirection: 'column',
       alignItems: 'stretch',
+      justifyContent: 'center',
       marginTop: 10,
       marginBottom: 20,
       marginLeft: 45,

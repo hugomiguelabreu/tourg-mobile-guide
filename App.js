@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
@@ -10,6 +10,16 @@ export default class App extends React.Component {
   };
 
   render() {
+    const theme = {
+        ...DefaultTheme,
+        roundness: 2,
+        colors: {
+            ...DefaultTheme.colors,
+            primary: '#2E3C58',
+            accent: '#349D88',
+        }
+    };
+
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -20,7 +30,7 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <PaperProvider>
+        <PaperProvider theme={theme}>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
               <AppNavigator />
