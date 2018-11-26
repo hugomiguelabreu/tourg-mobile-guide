@@ -8,7 +8,7 @@ import {
   View,
   Form
 } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, Button, Title } from 'react-native-paper';
 import { MonoText } from '../components/StyledText';
 
 export default class LoginScreen extends React.Component {
@@ -26,21 +26,28 @@ export default class LoginScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View>
-                <Text
-                    style={{fontSize: 27}}>
-                    Login
-                </Text>
+            <View style={styles.welcomeContainer}>
+                <Title>Login</Title>
                 <TextInput
                     label='Email'
                     value={this.state.email}
                     onChangeText={email => this.setState({ email: email })}
-                    style={styles.container}
+                    style={styles.textInput}
+                />
+                <TextInput
+                    label='Password'
+                    value={this.state.password}
+                    secureTextEntry={true}
+                    onChangeText={password=> this.setState({ password: password })}
+                    style={styles.textInput}
                 />
                 <TouchableOpacity
                     onPress={this.props.onLoginPress}
                     style={styles.button}>
-                    <Text> Touch Here </Text>
+                    <Button mode="contained" onPress={() => console.log('Pressed')}
+                            style={styles.buttonLogin}>
+                        Login
+                    </Button>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -62,48 +69,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
   contentContainer: {
     paddingTop: 30,
   },
+  buttonLogin:{
+    padding:10,
+  },
+  textInput:{
+    marginBottom: 25,
+  },
   welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
+      flexDirection: 'column',
+      alignItems: 'stretch',
+      marginTop: 10,
+      marginBottom: 20,
+      marginLeft: 45,
+      marginRight: 45,
   },
   tabBarInfoContainer: {
     position: 'absolute',
