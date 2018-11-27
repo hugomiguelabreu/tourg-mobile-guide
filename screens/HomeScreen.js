@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
   },
+
   tabBarInfoContainer: {
     position: 'absolute',
     bottom: 0,
