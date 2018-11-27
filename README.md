@@ -7,9 +7,13 @@ Install all dependencies of the project.
 ```
 npm install
 ```
-Start development environment
+Start development environment via expo app.
 ```
 npm start
+```
+Start development enviroment via adb (android usb debugging / requires android studio)
+```
+expo start --localhost --android
 ```
 
 ## Common problems
