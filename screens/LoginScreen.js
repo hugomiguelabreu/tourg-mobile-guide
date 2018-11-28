@@ -3,12 +3,11 @@ import {
     Platform,
     ScrollView,
     StyleSheet,
-    Text,
     TouchableOpacity,
     View,
     Form, Image
 } from 'react-native';
-import { TextInput, Button, Title } from 'react-native-paper';
+import {TextInput, Button, Title, Divider} from 'react-native-paper';
 
 export default class LoginScreen extends React.Component {
 
@@ -18,7 +17,7 @@ export default class LoginScreen extends React.Component {
     };
 
     static navigationOptions = {
-        title: 'Profile',
+        title: null,
     };
 
     render() {
@@ -36,7 +35,7 @@ export default class LoginScreen extends React.Component {
                         </View>
                         <View style={styles.loginView}>
                             <View style={{flexDirection:'row', justifyContent: 'center'}}>
-                                <Title style={{fontSize:38}}>Login</Title>
+                                <Title style={{fontSize:32}}>Login</Title>
                             </View>
                             <TextInput
                                 label='Email'
@@ -52,11 +51,20 @@ export default class LoginScreen extends React.Component {
                                 style={styles.textInput}
                             />
                             <TouchableOpacity
-                                onPress={this.props.onLoginPress}
+                                onPress={() => this.props.navigation.navigate('Main')}
                                 style={styles.button}>
-                                <Button mode="contained" onPress={() => console.log('Pressed')}
+                                <Button mode="contained"
                                         style={styles.buttonLogin}>
                                     Login
+                                </Button>
+                            </TouchableOpacity>
+                            <Divider/>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Register')}
+                                style={styles.button}>
+                                <Button mode="contained"
+                                        style={styles.buttonLogin}>
+                                    Register
                                 </Button>
                             </TouchableOpacity>
                         </View>
@@ -94,57 +102,16 @@ const styles = StyleSheet.create({
     imageView:{
         flex:1,
         flexDirection:'row',
-        height: 65,
         marginTop:30,
     },
     loginView:{
-        flex:3,
+        flex:4,
         flexDirection:'column',
-        height:100,
     },
     welcomeImage: {
         flex:1,
         height:65,
         flexDirection: 'row',
-        resizeMode: 'cover',
-    },
-    tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-        backgroundColor: '#fbfbfb',
-        paddingVertical: 20,
-    },
-    tabBarInfoText: {
-        fontSize: 17,
-        color: 'rgba(96,100,109, 1)',
-        textAlign: 'center',
-    },
-    navigationFilename: {
-        marginTop: 5,
-    },
-    helpContainer: {
-        marginTop: 15,
-        alignItems: 'center',
-    },
-    helpLink: {
-        paddingVertical: 15,
-    },
-    helpLinkText: {
-        fontSize: 14,
-        color: '#2e78b7',
+        resizeMode: 'contain',
     },
 });
