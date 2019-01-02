@@ -3,6 +3,8 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
+import axios from 'axios';
+import guideStore from './stores/GuideStore';
 
 export default class App extends React.Component {
   state = {
@@ -33,12 +35,18 @@ export default class App extends React.Component {
         <PaperProvider theme={theme}>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-              <AppNavigator />
+              <AppNavigator store = {guideStore}/>
           </View>
         </PaperProvider>
       );
     }
   }
+
+    _configAxios = () => {
+        axios.defaults.baseURL = 'http://188.166.173.44/api/';
+        axios.defaults.headers.common['Authorization'] = '';
+        axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
 
   _loadResourcesAsync = async () => {
     return Promise.all([
@@ -53,6 +61,7 @@ export default class App extends React.Component {
         // to remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
+        this._configAxios(),
     ]);
   };
 
