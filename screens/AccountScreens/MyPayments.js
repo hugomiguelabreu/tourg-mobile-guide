@@ -13,13 +13,26 @@ import {Icon} from 'expo';
 
 export default class MyPayments extends React.Component {
 
-    state = {
-
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            info:false
+        }
+    }
 
     static navigationOptions = {
         header: null,
     };
+
+    componentDidMount() {
+        // When the screen is focused again let's fetch new results
+        this.props.navigation.addListener(
+            'willFocus',
+            payload => {
+                this.setState({info: true});
+            }
+        );
+    }
 
     render() {
         return (
@@ -27,28 +40,39 @@ export default class MyPayments extends React.Component {
                 <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                     <View style={styles.welcomeContainer}>
                         <View style={styles.profile}>
-                            <List.Section title="Cards">
+                            <List.Section title="Banks">
                                 <List.Item
-                                    title="**** **** **** 9825"
-                                    left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='cc-mastercard' size={24} /> } />}
-                                    onPress = {() => {console.log('ola')}}
-                                />
-                                <List.Item
-                                    title="**** **** **** 7082"
-                                    left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='cc-visa' size={24} /> } />}
-                                    onPress = {() => {console.log('ola')}}
-                                />
-                            </List.Section>
-                            <List.Section title="Paypal">
-                                <List.Item
-                                    title="jo****3s@gmail.com"
-                                    left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='cc-paypal' size={24} /> } />}
-                                    onPress = {() => {console.log('ola')}}
+                                    title="DE89370400440532013000"
+                                    description="Commerzbank"
+                                    left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='university' size={24} /> } />}
+                                    onPress = {() => {this.setState({info:true})}}
                                 />
                             </List.Section>
                         </View>
                     </View>
                 </ScrollView>
+                <Snackbar
+                    visible={this.state.info}
+                    style={{backgroundColor: 'white'}}
+                    duration={15000}
+                    onDismiss={() => {
+                        this.setState({info: false});
+                    }}
+                    action={{
+                        label: 'Dismiss',
+                        onPress: () => {
+                            this.setState({info: false});
+                        },
+                    }}>
+                    <Icon.Ionicons
+                        name='md-alert'
+                        style={{color:'grey'}}
+                        size={16}
+                    />
+                    &nbsp;
+                    &nbsp;
+                    <Text style={{color:'black'}}>To manage payments, visit the website.</Text>
+                </Snackbar>
             </View>
         );
     }

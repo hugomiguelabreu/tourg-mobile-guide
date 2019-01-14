@@ -8,14 +8,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import {Icon, WebBrowser} from 'expo';
 
 import { MonoText } from '../components/StyledText';
+import {Snackbar} from "react-native-paper";
 
 export default class HomeScreen extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            info: false,
+        };
+    }
+
   static navigationOptions = {
     header: null,
   };
+
+  componentDidMount() {
+      // When the screen is focused again let's fetch new results
+      this.props.navigation.addListener(
+          'willFocus',
+          payload => {
+              this.setState({info: true});
+          }
+      );
+  }
 
   render() {
     return (
@@ -59,6 +78,28 @@ export default class HomeScreen extends React.Component {
           <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
             <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
           </View>
+            <Snackbar
+                visible={this.state.info}
+                style={{backgroundColor: 'white'}}
+                duration={15000}
+                onDismiss={() => {
+                    this.setState({info: false});
+                }}
+                action={{
+                    label: 'Dismiss',
+                    onPress: () => {
+                        this.setState({info: false});
+                    },
+                }}>
+                <Icon.Ionicons
+                    name='md-alert'
+                    style={{color:'grey'}}
+                    size={16}
+                />
+                &nbsp;
+                &nbsp;
+                <Text style={{color:'black'}}>To manage your tours, visit the website.</Text>
+            </Snackbar>
         </View>
       </View>
     );

@@ -30,7 +30,6 @@ PaymentsStack.navigationOptions = {
 
 
 export default createMaterialTopTabNavigator({
-    MyBookingsStack,
     ProfileStack,
     PaymentsStack,
 },{

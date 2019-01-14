@@ -12,14 +12,14 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Explore',
+  tabBarLabel: 'Tours',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-globe${focused ? '' : '-outline'}`
-          : 'md-globe'
+          ? `ios-calendar${focused ? '' : '-outline'}`
+          : 'md-calendar'
       }
     />
   ),
@@ -40,16 +40,16 @@ MapStack.navigationOptions = {
 };
 
 const SettingsStack = createStackNavigator({
-  Settings: AccountScreen,
+  Settings: LinksScreen,
 });
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+  tabBarLabel: 'Messages',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
+      <TabBarIcon
+          focused={focused}
+          name={Platform.OS === 'ios' ? 'ios-chatboxes' : 'md-chatboxes'}
+      />
   ),
 };
 
@@ -69,7 +69,6 @@ AccountStack.navigationOptions = {
 
 export default createBottomTabNavigator({
     HomeStack,
-    MapStack,
     SettingsStack,
     AccountStack,
 });

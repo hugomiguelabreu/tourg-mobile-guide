@@ -94,12 +94,14 @@ import Colors from "../../constants/Colors";
                                 <TextInput
                                     label='Name'
                                     value={this.state.name}
+                                    disabled={true}
                                     onChangeText={name => this.setState({name: name})}
                                     style={styles.textInput}
                                 />
                                 <TextInput
                                     label='Email'
                                     value={this.state.email}
+                                    disabled={true}
                                     onChangeText={email => this.setState({ email: email })}
                                     style={styles.textInput}
                                 />
@@ -113,6 +115,7 @@ import Colors from "../../constants/Colors";
                                 <TextInput
                                     label='Phone'
                                     value={this.state.phone}
+                                    disabled={true}
                                     onChangeText={phone=> this.setState({ phone: phone})}
                                     style={styles.textInput}
                                 />
