@@ -4,6 +4,7 @@ import {Button, TouchableRipple, Title} from "react-native-paper";
 import {Platform, TouchableOpacity, View} from "react-native";
 import AccountStack from '../navigation/AccountStack';
 import UserHeader from '../components/UserHeader';
+import {Constants} from "expo";
 
 export default class AccountScreen extends React.Component {
 
@@ -12,6 +13,7 @@ export default class AccountScreen extends React.Component {
         headerStyle: {
             height:86,
             elevation:1,
+            marginTop: -Constants.statusBarHeight,
         },
     });
 
