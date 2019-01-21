@@ -7,12 +7,26 @@ import {Icon} from "expo";
 export default class BookedCard extends React.Component {
 
     moment = require('moment');
-    joined = null;
 
     constructor(props){
         super(props);
-        if(this.props.guideJoined != null)
-            this.joined = this.moment(this.props.guideJoined.replace(/[-:Z]/g, ''));
+        this.state = {
+            end: this.moment(this.props.bookingDate.replace(/[-:Z]/g, '')).subtract(2, 'h'),
+            time: this.moment.duration(this.moment(this.props.bookingDate.replace(/[-:Z]/g, '')).subtract(2, 'h').diff(this.moment(Date.now()))),
+        }
+    }
+
+    componentDidMount() {
+
+        if(this.props.accepted == null &&
+            (this.moment(Date.now()).isBefore(this.state.end))) {
+            this.timer = setInterval(() => {
+                this.setState({ time: this.moment.duration(this.state.end.diff(this.moment(Date.now()))) });
+                if((this.state.time.valueOf() <= 0))
+                    clearInterval(this.timer);
+            }, 1000);
+        }
+
     }
 
     _confirmed() {
@@ -38,7 +52,10 @@ export default class BookedCard extends React.Component {
                     color='orange'
                     style={{ marginRight: 0 }}
                 />
+                <View syle={{flex:1, flexDirection:'column'}}>
                 <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>Pending</Subheading>
+                <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>({this.moment(this.state.time.asMilliseconds()).format('HH:mm:ss')})</Subheading>
+                </View>
             </View>
         );
     }
@@ -57,9 +74,117 @@ export default class BookedCard extends React.Component {
         );
     }
 
+    _actions() {
+
+        if(this.props.accepted == null &&
+            (this.state.time.valueOf() <= 0)){
+            return(
+                <View style={{flex:1, flexDirection:'column', alignItems:'center', justifyContent:'space-between', padding: 10}}>
+                    <Title style={{color:'gray'}}>Timed-out</Title>
+                </View>
+            );
+        }
+
+        if(this.props.accepted == true){
+            return (
+                <Card.Actions>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'space-around',
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            alignItems: 'center'
+                        }}>
+                            <View style={{flex: 1, padding: 5}}>
+                                <TouchableNativeFeedback onPress={() => {this.props.navigation.navigate('Map', {bookingId:this.props.id})}}>
+                                    <Button mode='contained' style={{backgroundColor: 'orange'}}
+                                            title='Start'>Start tour</Button>
+                                </TouchableNativeFeedback>
+                            </View>
+                            <View style={{flex: 1, padding: 5}}>
+                                <TouchableNativeFeedback onPress={() => {
+                                    console.log("Back")
+                                }}>
+                                    <Button mode='contained' style={{backgroundColor: 'red'}}
+                                            title='Cancel'>
+                                        Cancel
+                                    </Button>
+                                </TouchableNativeFeedback>
+                            </View>
+                        </View>
+                    </View>
+                </Card.Actions>
+            );
+        }
+
+        if(this.props.accepted == null) {
+            return (
+                <Card.Actions>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'space-around',
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            alignItems: 'center'
+                        }}>
+                            <View style={{flex: 1, padding: 5}}>
+                                <TouchableNativeFeedback onPress={() => {
+                                    console.log("Back")
+                                }}>
+                                    <Button mode='contained' style={{backgroundColor: 'green'}}
+                                            title='Accept'>Accept</Button>
+                                </TouchableNativeFeedback>
+                            </View>
+                            <View style={{flex: 1, padding: 5}}>
+                                <TouchableNativeFeedback onPress={() => {
+                                    console.log("Back")
+                                }}>
+                                    <Button mode='contained' style={{backgroundColor: 'red'}}
+                                            title='Accept'>Cancel</Button>
+                                </TouchableNativeFeedback>
+                            </View>
+                        </View>
+                    </View>
+                </Card.Actions>
+            );
+        }
+
+    }
+
+    _state(){
+
+        if(this.props.accepted == null
+            && (this.state.time.valueOf() <= 0)){
+            return(
+                this._canceled()
+            );
+        }
+
+        if(this.props.accepted == true)
+            return this._confirmed();
+        else if(this.props.accepted == false)
+            return this._canceled();
+        else
+            return this._pending();
+    }
+
     render() {
         return (
             <View style={{flex:1, flexDirection: 'column', paddingBottom: 30}}>
+                    <TouchableNativeFeedback
+                        onPress={() => {
+                            this.props.navigation.navigate('Activity', {activityId: this.props.activityId})
+                        }}>
                     <Card style={{flex:1}}>
                         <Card.Cover style={{height:120}} source={{ uri: 'https://picsum.photos/500/?random' }} />
                         <Card.Content style={{flex:1, paddingTop: 5}}>
@@ -68,19 +193,19 @@ export default class BookedCard extends React.Component {
                                     <Title>{this.props.title}</Title>
                                     <Paragraph numberOfLines={2}>{this.props.description}</Paragraph>
                                 </View>
-                                {this._pending()}
+                                {this._state()}
                             </View>
                         </Card.Content>
                         <Divider style={{marginTop: 10, marginBottom: 2}} />
                         <Card.Actions>
-                            <View style={{flex:1, flexDirection:'column', justifyContent: 'space-around', alignItems: 'center'}}>
+                            <View style={{flex:1, flexDirection:'column', justifyContent: 'space-around', alignItems: 'center', paddingLeft:5}}>
                                 <View style={{flex:1, flexDirection:'row', justifyContent: 'space-around', alignItems: 'center'}}>
                                     <View style={{flex:0.5, flexDirection:'row'}}>
                                         <Image style={{width:32, height:32}} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDSnWBOqgvr4hOdTTAhcaNU3KAaWQNn8UHqafmbHY_y39ysZ1'}} />
                                     </View>
                                     <View style={{flex:1, flexDirection:'column'}}>
-                                        <Text style={{fontWeight: '900'}}>{this.props.guideName}</Text>
-                                        <Text style={{fontSize: 11, color:'grey'}}>Joined {this.joined != null ? this.joined.format("MMM YYYY") : ''}</Text>
+                                        <Text style={{fontWeight: '900'}}>{this.props.userName}</Text>
+                                        <Text style={{fontSize: 11, color:'grey'}}>Joined {this.props.userJoined != null ? this.moment(this.props.userJoined.replace(/[-:Z]/g, '')).format("MMM, YYYY") : ''}</Text>
                                     </View>
                                     <View style={{flex:1, flexDirection:'column', paddingLeft: 10}}>
                                         <Text style={{fontWeight: '900'}}>Date</Text>
@@ -107,24 +232,9 @@ export default class BookedCard extends React.Component {
                                 </View>
                             </View>
                         </Card.Actions>
-                        <Divider style={{marginTop: 10, marginBottom: 2}} />
-                        <Card.Actions>
-                            <View style={{flex:1, flexDirection:'column', justifyContent: 'space-around', alignItems: 'center'}}>
-                                <View style={{flex:1, flexDirection:'row', justifyContent: 'space-around', alignItems: 'center'}}>
-                                    <View style={{flex:1, padding: 5}}>
-                                        <TouchableNativeFeedback onPress={() => {console.log("Back")}}>
-                                            <Button mode='contained' style={{backgroundColor:'green'}} title='Accept'>Accept</Button>
-                                        </TouchableNativeFeedback>
-                                    </View>
-                                    <View style={{flex:1, padding: 5}}>
-                                        <TouchableNativeFeedback onPress={() => {console.log("Back")}}>
-                                            <Button mode='contained' style={{backgroundColor:'red'}} title='Accept'>Cancel</Button>
-                                        </TouchableNativeFeedback>
-                                    </View>
-                                </View>
-                            </View>
-                        </Card.Actions>
+                        {this._actions()}
                     </Card>
+                    </TouchableNativeFeedback>
             </View>
         );
     }

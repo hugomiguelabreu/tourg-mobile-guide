@@ -48,14 +48,16 @@ export default class HomeScreen extends React.Component {
         this.setState({isLoading: true});
         axios.get('/guide/bookings')
             .then((resp) => {
-                console.log(resp.data[0].Activities);
-                me.setState({isLoading:false, activities: resp.data[0].Activities});
+                // Set response and loading
+                me.setState({isLoading:false, activities: resp.data.Activities});
+                // Clear bookings
+                this.setState({bookings: []});
+                // Map new bookings to list
                 this.state.activities.forEach((activity) => {
                     activity.Bookings.forEach((book) => {
                         this.setState({bookings: [...this.state.bookings, book]});
                     });
                 });
-                console.log(this.state.bookings);
             })
             .catch((err) => {
                 me.setState({isLoading:false, activities: null});
@@ -66,7 +68,7 @@ export default class HomeScreen extends React.Component {
     activities = () => {
         if(this.state.bookings == null || this.state.bookings.length == 0){
             return(<View style={{flex:1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                <Title style={{color:'gray'}}>No booked activities</Title>
+                <Title style={{color:'gray'}}>No upcoming tours</Title>
             </View>);
         }else{
             return(<FlatList
@@ -74,10 +76,11 @@ export default class HomeScreen extends React.Component {
                 keyExtractor={(item, index) => 'item' + index}
                 renderItem={({item}) =>
                     <BookedCard id={item.id} title={item.Activity.title} description={item.Activity.description}
-                                guideId={guideStore.id}
-                                guideName={guideStore.name} guideJoined={guideStore.createdAt} navigation={this.props.navigation}
-                                bookingDate={item.createdAt}
-                                rating = {true} />
+                                userId={item.User.id} accepted={item.accepted}
+                                userJoined={item.User.createdAt}
+                                activityId={item.Activity.id}
+                                userName={item.User.name} navigation={this.props.navigation}
+                                bookingDate={item.Activity_Date.timestamp}/>
                 }
             />);
         }
