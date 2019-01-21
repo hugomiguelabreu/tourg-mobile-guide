@@ -7,6 +7,9 @@ import guideStore from '../stores/GuideStore';
 import {observer} from "mobx-react/native";
 
 @observer export default class SearchHeader extends React.Component {
+
+    moment = require('moment');
+
     render() {
         return (
             <View style={{flex:1, flexDirection:'row', alignItems: 'center', justifyContent:'space-around'}}>
@@ -15,7 +18,8 @@ import {observer} from "mobx-react/native";
                 </View>
                 <View style={{flex:0.4, flexDirection:'column', justifyContent: 'flex-start', alignItems:'flex-start'}}>
                     <Text style={{fontWeight: '900'}}>{guideStore.name}</Text>
-                    <Text style={{fontSize: 11, color:'grey'}}>Joined August, 2018</Text>
+                    <Text style={{fontSize: 11, color:'grey'}}>Joined {guideStore.createdAt != null ?
+                        this.moment(guideStore.createdAt.replace(/[-:Z]/g, '')).format("MMM, YYYY") : ''}</Text>
                 </View>
                 <View style={{flex:0.4, flexDirection:'row', justifyContent:'flex-start'}}>
                     <Icon.Ionicons
@@ -23,8 +27,10 @@ import {observer} from "mobx-react/native";
                         size={16}
                         style={{ marginTop:0.5, marginRight: 5 }}
                     />
-                    <Text style={{ fontSize: 14, color:'grey', marginRight: 5 }}>4.5</Text>
-                    <Text style={{ fontSize: 14, color:'grey' }}>(143)</Text>
+                    <Text style={{ fontSize: 14, color:'grey', marginRight: 5 }}>
+                        {guideStore.rating == null ? 0 : (guideStore.rating / guideStore.rating_count).toFixed(1)}
+                    </Text>
+                    <Text style={{ fontSize: 14, color:'grey' }}>({guideStore.rating_count})</Text>
                 </View>
                 <View style={{flex:0.2, flexDirection:'row', justifyContent:'flex-start'}}>
                     <TouchableRipple

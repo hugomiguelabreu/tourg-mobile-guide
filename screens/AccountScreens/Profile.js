@@ -53,11 +53,11 @@ import Colors from "../../constants/Colors";
         else
             data = {email: state.email, name: state.name, phone: state.phone, bio: state.bio}
 
-        /**
-        axios.post('/user/update',
+        axios.post('/guide/update',
             data)
             .then((resp) => {
                 //Put user in store
+                console.log(resp.data);
                 guideUser.updateUser(resp.data);
                 me.setState({successMessage: 'Profile successfully updated'});
             })
@@ -65,7 +65,6 @@ import Colors from "../../constants/Colors";
                 me.setState({ errorMessage: 'Something went wrong updating the profile' });
                 console.log(err);
             });
-         */
     }
 
     render() {

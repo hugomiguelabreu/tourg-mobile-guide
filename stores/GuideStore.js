@@ -11,7 +11,10 @@ class Guide {
     @persist @observable name = "";
     @persist @observable phone = "";
     @persist @observable bio = "";
+    @persist @observable rating = null;
+    @persist @observable rating_count = 0;
     @persist @observable photo_path = null;
+    @persist @observable createdAt = null;
 
     @action login(data){
         this.token = data.token;
@@ -21,13 +24,16 @@ class Guide {
         this.name = data.user.User.name;
         this.phone = data.user.User.phone;
         this.bio = data.user.User.bio;
+        this.rating = data.user.total_guide_score;
+        this.rating_count = data.user.n_guide_score;
+        this.createdAt = data.user.User.createdAt;
         this.photo_path = data.user.User.photo_path;
     }
 
     @action updateGuide(data){
         //this.name = data.name;
         //this.phone = data.phone;
-        //this.bio = data.bio;
+        this.bio = data.bio;
     }
 
     @action logout(){

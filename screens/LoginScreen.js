@@ -17,8 +17,8 @@ import axios from 'axios';
 export default class LoginScreen extends React.Component {
 
     state = {
-        loginEmail: '',
-        loginPassword: '',
+        loginEmail: 'k@mail.com',
+        loginPassword: '123456',
         loginErrorMessage:'',
     };
 
@@ -37,6 +37,7 @@ export default class LoginScreen extends React.Component {
             {email:email, password: password})
             .then((resp) => {
                 //Put user in store
+                console.log(resp.data);
                 guideStore.login(resp.data);
                 // Navigate to dashboard;
                 me.props.navigation.navigate('Main');
