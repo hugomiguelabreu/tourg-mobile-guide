@@ -29,6 +29,10 @@ export default class BookedCard extends React.Component {
 
     }
 
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
+
     _confirmed() {
         return(
             <View style={{flex:1, flexDirection:'row', justifyContent:'flex-start', alignItems: 'center'}}>
@@ -53,8 +57,8 @@ export default class BookedCard extends React.Component {
                     style={{ marginRight: 0 }}
                 />
                 <View syle={{flex:1, flexDirection:'column'}}>
-                <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>Pending</Subheading>
-                <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>({this.moment(this.state.time.asMilliseconds()).format('HH:mm:ss')})</Subheading>
+                    <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>Pending</Subheading>
+                    <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>({this.moment(this.state.time.asMilliseconds()).format('HH:mm:ss')})</Subheading>
                 </View>
             </View>
         );
