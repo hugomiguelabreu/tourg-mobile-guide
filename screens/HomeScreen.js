@@ -4,11 +4,11 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text, FlatList,
+  RefreshControl, FlatList,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Title} from 'react-native-paper';
+import {Subheading, Title} from 'react-native-paper';
 import {Icon, WebBrowser} from 'expo';
 import LoadingModal from '../components/LoadingModal';
 import BookedCard from '../components/BookedCard';
@@ -23,6 +23,7 @@ export default class HomeScreen extends React.Component {
             activities: null,
             bookings: [],
             isLoading: true,
+            refreshing: false,
         };
     }
 
@@ -30,7 +31,7 @@ export default class HomeScreen extends React.Component {
         headerTitle: <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Title>UPCOMING TOURS</Title></View>,
         headerStyle: {
           marginTop: -Constants.statusBarHeight,
-        }
+        },
     };
 
     componentDidMount() {
@@ -43,10 +44,20 @@ export default class HomeScreen extends React.Component {
         );
     }
 
-    _getBookings() {
+    _onRefresh = () => {
+        this.setState({refreshing: true});
+        this._getBookings().then(() => {
+            this.setState({refreshing: false});
+        });
+    }
+
+    async _getBookings() {
         let me = this;
-        this.setState({isLoading: true});
-        axios.get('/guide/bookings')
+
+        if(this.state.refreshing === true)
+            this.setState({isLoading: true});
+
+        await axios.get('/guide/bookings')
             .then((resp) => {
                 // Set response and loading
                 me.setState({isLoading:false, activities: resp.data.Activities});
@@ -90,7 +101,15 @@ export default class HomeScreen extends React.Component {
         if(!this.state.isLoading) {
             return (
                 <View style={styles.container}>
-                    <ScrollView style={styles.container} contentContainerStyle={{flexGrow:1}}>
+                    <ScrollView style={styles.container} contentContainerStyle={{flexGrow:1}}
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={this.state.refreshing}
+                                        onRefresh={this._onRefresh} />
+                                }>
+                        <View style={{flexDirection: 'column', alignItems:'center', justifyContent:'space-between', paddingBottom: 10}}>
+                            <Subheading style={{color:'gray'}}>Pull down to refresh</Subheading>
+                        </View>
                         <View style={styles.list}>
                             {this.activities()}
                         </View>

@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, Text, TouchableNativeFeedback, Image, StyleSheet, ActivityIndicator, Modal} from 'react-native';
+import {View, Text, TouchableNativeFeedback, Image, Alert, StyleSheet, ActivityIndicator, Modal} from 'react-native';
 import {Title, Card, Paragraph, Button, Divider, Subheading} from "react-native-paper";
 import Colors from "../constants/Colors";
 import {Icon} from "expo";
+import axios from "axios";
 
 export default class BookedCard extends React.Component {
 
@@ -11,6 +12,8 @@ export default class BookedCard extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            bookingId: this.props.id,
+            accepted: this.props.accepted,
             end: this.moment(this.props.bookingDate.replace(/[-:Z]/g, '')).subtract(2, 'h'),
             time: this.moment.duration(this.moment(this.props.bookingDate.replace(/[-:Z]/g, '')).subtract(2, 'h').diff(this.moment(Date.now()))),
         }
@@ -18,7 +21,7 @@ export default class BookedCard extends React.Component {
 
     componentDidMount() {
 
-        if(this.props.accepted == null &&
+        if(this.state.accepted == null &&
             (this.moment(Date.now()).isBefore(this.state.end))) {
             this.timer = setInterval(() => {
                 this.setState({ time: this.moment.duration(this.state.end.diff(this.moment(Date.now()))) });
@@ -80,7 +83,7 @@ export default class BookedCard extends React.Component {
 
     _actions() {
 
-        if(this.props.accepted == null &&
+        if(this.state.accepted == null &&
             (this.state.time.valueOf() <= 0)){
             return(
                 <View style={{flex:1, flexDirection:'column', alignItems:'center', justifyContent:'space-between', padding: 10}}>
@@ -89,7 +92,7 @@ export default class BookedCard extends React.Component {
             );
         }
 
-        if(this.props.accepted == true){
+        if(this.state.accepted == true){
             return (
                 <Card.Actions>
                     <View style={{
@@ -112,7 +115,7 @@ export default class BookedCard extends React.Component {
                             </View>
                             <View style={{flex: 1, padding: 5}}>
                                 <TouchableNativeFeedback onPress={() => {
-                                    console.log("Back")
+                                    this.cancelTour()
                                 }}>
                                     <Button mode='contained' style={{backgroundColor: 'red'}}
                                             title='Cancel'>
@@ -126,7 +129,7 @@ export default class BookedCard extends React.Component {
             );
         }
 
-        if(this.props.accepted == null) {
+        if(this.state.accepted == null) {
             return (
                 <Card.Actions>
                     <View style={{
@@ -143,7 +146,7 @@ export default class BookedCard extends React.Component {
                         }}>
                             <View style={{flex: 1, padding: 5}}>
                                 <TouchableNativeFeedback onPress={() => {
-                                    console.log("Back")
+                                    this.updateActivityState(true)
                                 }}>
                                     <Button mode='contained' style={{backgroundColor: 'green'}}
                                             title='Accept'>Accept</Button>
@@ -151,10 +154,10 @@ export default class BookedCard extends React.Component {
                             </View>
                             <View style={{flex: 1, padding: 5}}>
                                 <TouchableNativeFeedback onPress={() => {
-                                    console.log("Back")
+                                    this.cancelTour()
                                 }}>
                                     <Button mode='contained' style={{backgroundColor: 'red'}}
-                                            title='Accept'>Cancel</Button>
+                                            title='Cancel'>Cancel</Button>
                                 </TouchableNativeFeedback>
                             </View>
                         </View>
@@ -166,20 +169,43 @@ export default class BookedCard extends React.Component {
     }
 
     _state(){
-
-        if(this.props.accepted == null
+        if(this.state.accepted == null
             && (this.state.time.valueOf() <= 0)){
             return(
                 this._canceled()
             );
         }
 
-        if(this.props.accepted == true)
+        if(this.state.accepted == true)
             return this._confirmed();
-        else if(this.props.accepted == false)
+        else if(this.state.accepted == false)
             return this._canceled();
         else
             return this._pending();
+    }
+
+    cancelTour(){
+        Alert.alert(
+            'Cancel tour',
+            'Do you want to cancel the tour?',
+            [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'Yes', onPress: () => this.updateActivityState(false)},
+            ], { cancelable: false });
+    }
+
+    updateActivityState(state){
+        let me = this;
+
+        axios.post('/guide/booking/' + this.state.bookingId + '/accept',
+            {state: state})
+            .then((resp) => {
+                // Set response and loading
+                me.setState({accepted:state});
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     render() {
