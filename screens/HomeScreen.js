@@ -57,9 +57,13 @@ export default class HomeScreen extends React.Component {
         if(this.state.refreshing === true)
             this.setState({isLoading: true});
 
+        console.log(guideStore.token);
+        console.log(axios.defaults.headers.common['Authorization']);
+
         await axios.get('/guide/bookings')
             .then((resp) => {
                 // Set response and loading
+                console.log(resp.data);
                 me.setState({isLoading:false, activities: resp.data.Activities});
                 // Clear bookings
                 this.setState({bookings: []});

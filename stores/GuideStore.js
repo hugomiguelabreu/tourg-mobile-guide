@@ -20,7 +20,7 @@ class Guide {
 
     @action login(data){
         this.token = data.token;
-        this.id = data.user.User.id;
+        this.id = data.user.id;
         this.email = data.user.User.email;
         this.password = data.user.User.password;
         this.name = data.user.User.name;
@@ -32,6 +32,7 @@ class Guide {
         this.swift = data.user.swift;
         this.createdAt = data.user.User.createdAt;
         this.photo_path = data.user.User.photo_path;
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + guideStore.token;
     }
 
     @action updateGuide(data){

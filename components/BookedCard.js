@@ -52,7 +52,7 @@ export default class BookedCard extends React.Component {
 
     _done() {
         return(
-            <View style={{flex:1, flexDirection:'row', justifyContent:'flex-start', alignItems: 'center'}}>
+            <View style={{flex:0.9, flexDirection:'row', justifyContent:'flex-start', alignItems: 'center'}}>
                 <Icon.Ionicons
                     name='md-happy'
                     size={16}
