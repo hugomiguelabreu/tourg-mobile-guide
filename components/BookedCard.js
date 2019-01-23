@@ -50,6 +50,20 @@ export default class BookedCard extends React.Component {
         );
     }
 
+    _done() {
+        return(
+            <View style={{flex:1, flexDirection:'row', justifyContent:'flex-start', alignItems: 'center'}}>
+                <Icon.Ionicons
+                    name='md-happy'
+                    size={16}
+                    color='green'
+                    style={{ marginRight: 0 }}
+                />
+                <Subheading style={{fontSize:14, color:'green', marginLeft: 5}}>Done</Subheading>
+            </View>
+        );
+    }
+
     _pending() {
         return(
             <View style={{flex:1, flexDirection:'row', justifyContent:'flex-start', alignItems: 'center'}}>
@@ -92,7 +106,7 @@ export default class BookedCard extends React.Component {
             );
         }
 
-        if(this.state.accepted == true){
+        if(this.state.accepted == true && (this.moment(Date.now()).isBefore(this.state.end))){
             return (
                 <Card.Actions>
                     <View style={{
@@ -176,8 +190,10 @@ export default class BookedCard extends React.Component {
             );
         }
 
-        if(this.state.accepted == true)
-            return this._confirmed();
+        if(this.state.accepted == true && !(this.moment(Date.now()).isBefore(this.state.end)))
+            return this._done();
+        else if(this.state.accepted == true)
+            return this._confirmed()
         else if(this.state.accepted == false)
             return this._canceled();
         else
