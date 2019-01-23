@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {List, Colors, Title, Snackbar, Divider} from 'react-native-paper';
 import {Icon} from 'expo';
+import guideStore from "../../stores/GuideStore";
 
 export default class MyPayments extends React.Component {
 
@@ -40,10 +41,10 @@ export default class MyPayments extends React.Component {
                 <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                     <View style={styles.welcomeContainer}>
                         <View style={styles.profile}>
-                            <List.Section title="Banks">
+                            <List.Section title="Bank Account">
                                 <List.Item
-                                    title="DE89370400440532013000"
-                                    description="Commerzbank"
+                                    title={guideStore.iban}
+                                    description={guideStore.swift}
                                     left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='university' size={24} /> } />}
                                     onPress = {() => {this.setState({info:true})}}
                                 />

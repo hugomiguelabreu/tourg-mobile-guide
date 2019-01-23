@@ -1,10 +1,16 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
+import {Title} from "react-native-paper";
+import {Constants} from "expo";
 
 export default class LinksScreen extends React.Component {
+
   static navigationOptions = {
-    title: 'Links',
+      headerTitle: <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Title>CHAT</Title></View>,
+      headerStyle: {
+          marginTop: -Constants.statusBarHeight,
+      },
   };
 
   render() {

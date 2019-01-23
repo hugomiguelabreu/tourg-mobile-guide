@@ -108,7 +108,19 @@ export default class HomeScreen extends React.Component {
                                         onRefresh={this._onRefresh} />
                                 }>
                         <View style={{flexDirection: 'column', alignItems:'center', justifyContent:'space-between', paddingBottom: 10}}>
-                            <Subheading style={{color:'gray'}}>Pull down to refresh</Subheading>
+                            <View style={{flex:1, flexDirection:'row'}}>
+                                <Icon.Ionicons
+                                    name='md-arrow-round-down'
+                                    style={{color:'gray', marginRight:10, paddingTop: 5}}
+                                    size={16}
+                                />
+                                <Subheading style={{color:'gray'}}>Pull down to refresh</Subheading>
+                                <Icon.Ionicons
+                                    name='md-arrow-round-down'
+                                    style={{color:'gray', marginLeft:10, paddingTop: 5}}
+                                    size={16}
+                                />
+                            </View>
                         </View>
                         <View style={styles.list}>
                             {this.activities()}

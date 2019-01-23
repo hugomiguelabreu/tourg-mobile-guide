@@ -16,6 +16,8 @@ import {observer} from "mobx-react/native";
 import axios from "axios";
 import {Icon} from "expo";
 import Colors from "../../constants/Colors";
+import { ImagePicker } from 'expo';
+
 
 @observer export default class Profile extends React.Component {
 
@@ -27,14 +29,48 @@ import Colors from "../../constants/Colors";
             phone: guideStore.phone,
             name: guideStore.name,
             bio: guideStore.bio,
+            photo: guideStore.photo_path,
             errorMessage: '',
             successMessage: '',
         };
     }
 
-
     static navigationOptions = {
         header: null,
+    };
+
+    _pickImage = async () => {
+        // only if user allows permission t
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            mediaTypes: "Images",
+            aspect: [3, 4],
+        });
+        console.log(pickerResult);
+        if(pickerResult.cancelled == false)
+            guideStore.updatePhoto(pickerResult.uri);
+        return;
+        if(pickerResult.cancelled == false){
+            const formData = new FormData();
+            formData.append("photo", {
+                name: "picture",
+                type: pickerResult.type,
+                uri:
+                    Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+            });
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            };
+            axios.post("/user/upload", formData, config)
+                .then((resp) => {
+                    userStore.updatePhoto(pickerResult.uri);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     };
 
     _saveProfile(state){
@@ -74,12 +110,15 @@ import Colors from "../../constants/Colors";
                 <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                     <View style={styles.welcomeContainer}>
                         <View style={styles.profile}>
-                            <TouchableNativeFeedback>
+                            <TouchableNativeFeedback
+                                onPress={this._pickImage}>
                                 <View style={{flex:1, flexDirection:'row'}}>
                                     <View style={{flex:0.3, flexDirection:'row', padding:10, alignItems:'center', justifyContent: 'center'}}>
                                         <Image style={{height: 54, width: 54}}
                                                resizeMode = 'cover'
-                                               source={{uri: 'https://media.istockphoto.com/photos/confident-businessman-posing-in-the-office-picture-id891418990?k=6&m=891418990&s=612x612&w=0&h=BItvQKG0Wf4Ht3XHPxa2LV0WkCtNjhBjkQv28Dhq2pA='}} />
+                                               source={{uri: guideStore.photo_path == null ?
+                                                       'https://media.istockphoto.com/photos/confident-businessman-posing-in-the-office-picture-id891418990?k=6&m=891418990&s=612x612&w=0&h=BItvQKG0Wf4Ht3XHPxa2LV0WkCtNjhBjkQv28Dhq2pA='
+                                                       : guideStore.photo_path}}/>
                                     </View>
                                     <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
                                         <Text style={{padding:10, fontSize:16, fontWeight:'bold'}}>Update profile picture</Text>

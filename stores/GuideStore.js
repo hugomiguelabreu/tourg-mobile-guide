@@ -12,6 +12,8 @@ class Guide {
     @persist @observable phone = "";
     @persist @observable bio = "";
     @persist @observable rating = null;
+    @persist @observable iban = "";
+    @persist @observable swift = "";
     @persist @observable rating_count = 0;
     @persist @observable photo_path = null;
     @persist @observable createdAt = null;
@@ -26,6 +28,8 @@ class Guide {
         this.bio = data.user.User.bio;
         this.rating = data.user.total_guide_score;
         this.rating_count = data.user.n_guide_score;
+        this.iban = data.user.account_number;
+        this.swift = data.user.swift;
         this.createdAt = data.user.User.createdAt;
         this.photo_path = data.user.User.photo_path;
     }
@@ -36,6 +40,10 @@ class Guide {
         this.bio = data.bio;
     }
 
+    @action updatePhoto(uri){
+        this.photo_path = uri;
+    }
+
     @action logout(){
         this.token = null;
         this.id = null;
@@ -44,7 +52,12 @@ class Guide {
         this.name = "";
         this.phone = "";
         this.bio = "";
+        this.rating = null;
+        this.iban = "";
+        this.swift = "";
+        this.rating_count = 0;
         this.photo_path = null;
+        this.createdAt = null;
     }
 }
 

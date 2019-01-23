@@ -45,7 +45,7 @@ export default class BookedCard extends React.Component {
                     color='green'
                     style={{ marginRight: 0 }}
                 />
-                <Subheading style={{fontSize:14, color:'green', marginLeft: 10}}>Confirmed</Subheading>
+                <Subheading style={{fontSize:14, color:'green', marginLeft: 5}}>Confirmed</Subheading>
             </View>
         );
     }
@@ -60,8 +60,8 @@ export default class BookedCard extends React.Component {
                     style={{ marginRight: 0 }}
                 />
                 <View syle={{flex:1, flexDirection:'column'}}>
-                    <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>Pending</Subheading>
-                    <Subheading style={{fontSize:14, color:'orange', marginLeft: 10}}>({this.moment(this.state.time.asMilliseconds()).format('HH:mm:ss')})</Subheading>
+                    <Subheading style={{fontSize:14, color:'orange', marginLeft: 5}}>Pending</Subheading>
+                    <Subheading style={{fontSize:14, color:'orange', marginLeft: 5}}>({this.moment(this.state.time.asMilliseconds()).format('HH:mm:ss')})</Subheading>
                 </View>
             </View>
         );
@@ -76,7 +76,7 @@ export default class BookedCard extends React.Component {
                     color='red'
                     style={{ marginRight: 0 }}
                 />
-                <Subheading style={{fontSize:14, color:'red', marginLeft: 10}}>Canceled</Subheading>
+                <Subheading style={{fontSize:14, color:'red', marginLeft: 5}}>Canceled</Subheading>
             </View>
         );
     }
