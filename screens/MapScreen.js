@@ -10,12 +10,12 @@ import {
     Modal,
     AsyncStorage, KeyboardAvoidingView, Text, TouchableNativeFeedback
 } from 'react-native';
-import {TextInput, Button, Title, HelperText, Divider, Card} from 'react-native-paper';
+import {TextInput, Button, Title, HelperText, Divider, Card, Subheading} from 'react-native-paper';
 import axios from 'axios';
 import {Icon, Constants} from 'expo';
 import {Header} from 'react-navigation';
 import MapView, {AnimatedRegion, PROVIDER_GOOGLE} from 'react-native-maps';
-import MapViewAnimated from 'react-native-maps';
+import {MapViewAnimated, Marker} from 'react-native-maps';
 import LoadingModal from "../components/LoadingModal";
 
 export default class MapScreen extends React.Component {
@@ -32,6 +32,10 @@ export default class MapScreen extends React.Component {
             userPhoto: null,
             userName: '',
             userJoined: null,
+            myLat: 50,
+            myLng: 10,
+            usrLat: null,
+            usrLng: null,
         };
     }
 
@@ -82,6 +86,24 @@ export default class MapScreen extends React.Component {
             });
     }
 
+    _updateCoordinates = (lat, lng) => {
+        let me = this;
+
+        axios.post('/guide/booking/' + this.state.bookingId + '/gps',
+            {lat: lat, lng: lng})
+            .then((resp) => {
+                // Set response and loading
+                console.log(resp.data);
+                me.setState({
+                    myLat: lat, myLng: lng,
+                    usrLat: resp.data.user_lat, usrLng:resp.data.user_lng
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     //Function to get user location using gps
     _getLocation = () => {
         let me = this;
@@ -97,16 +119,18 @@ export default class MapScreen extends React.Component {
 
     _setMyLocation = event => {
         const myLocation = event.nativeEvent.coordinate;
-        console.log(myLocation);
-        return;
-        if (
-            this.state.followsUserLocation &&
-            this.state.myLocation.latitude &&
-            this.state.myLocation.longitude
-        ) {
-            this._gotoCurrentLocation();
-        }
+        this._updateCoordinates(myLocation.latitude, myLocation.longitude);
     };
+
+    _showUser = () => {
+        if(this.state.usrLat != null && this.state.usrLng != null)
+            return(
+                <Marker title={this.state.userName}
+                        description='Current location of client'
+                        coordinate={{latitude: this.state.usrLat, longitude: this.state.usrLng}}
+                />
+            );
+    }
 
     render() {
         if(this.state.isLoading == false){
@@ -119,11 +143,20 @@ export default class MapScreen extends React.Component {
                                     <Image style={{width:32, height:32}} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDSnWBOqgvr4hOdTTAhcaNU3KAaWQNn8UHqafmbHY_y39ysZ1'}} />
                                 </View>
                                 <View style={{flex:0.7, flexDirection:'column'}}>
-                                    <Text style={{fontWeight: '900'}}>{this.state.userName}</Text>
+                                    <Text style={{fontWeight: '900'}}>{this.state.userName}
+                                    &nbsp;
+                                        {this.state.usrLng == null && this.state.usrLat == null ?
+                                            <Icon.Ionicons
+                                                name='ios-radio-button-on'
+                                                style={{color:'red', marginRight:10, paddingTop: 5}}
+                                                size={14}/> :
+                                            <Icon.Ionicons
+                                                name='ios-radio-button-on'
+                                                style={{color:'green', marginRight:10, paddingTop: 5}}
+                                                size={14}/>
+                                        }
+                                    </Text>
                                     <Text style={{fontSize: 11, color:'grey'}}>Joined {this.moment(this.state.userJoined.replace(/[-:Z]/g, '')).format("MMM, YYYY")}</Text>
-                                </View>
-                                <View style={{flex:0.5}}>
-                                    <Title>{this.state.time}</Title>
                                 </View>
                                 <View style={{flex:1, flexDirection:'column'}}>
                                     <View style={{flex: 1, padding: 5, paddingTop:10}}>
@@ -137,14 +170,15 @@ export default class MapScreen extends React.Component {
                         </View>
                     </Card.Actions>
                     <Divider/>
-                    <MapViewAnimated
+                    <MapView
                         provider={PROVIDER_GOOGLE}
                         region={this.state.region}
                         onUserLocationChange={this._setMyLocation}
                         followsUserLocation={true}
                         style={styles.map}
                         showsUserLocation={true}>
-                    </MapViewAnimated>
+                        {this._showUser()}
+                    </MapView>
                 </View>
             );
         }else {

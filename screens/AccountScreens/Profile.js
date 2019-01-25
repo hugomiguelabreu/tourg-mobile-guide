@@ -25,7 +25,7 @@ import { ImagePicker } from 'expo';
         super(props);
         this.state = {
             email: guideStore.email,
-            password: guideStore.password,
+            password: '',
             phone: guideStore.phone,
             name: guideStore.name,
             bio: guideStore.bio,
@@ -94,7 +94,7 @@ import { ImagePicker } from 'expo';
             .then((resp) => {
                 //Put user in store
                 console.log(resp.data);
-                guideUser.updateUser(resp.data);
+                guideStore.updateGuide(resp.data);
                 me.setState({successMessage: 'Profile successfully updated'});
             })
             .catch((err) => {
