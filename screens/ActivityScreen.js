@@ -27,6 +27,9 @@ export default class ActivityScreen extends React.Component {
             total_activity_score: null,
             n_activity_score: 0,
             region:null,
+            max:0,
+            min:0,
+            price: 0,
             guideName: '',
             guideBio: '',
             guideTotalScore: null,
@@ -74,6 +77,9 @@ export default class ActivityScreen extends React.Component {
                     guideName: resp.data.Guide.User.name,
                     guideBio: resp.data.Guide.User.bio,
                     duration: resp.data.duration,
+                    max: resp.data.n_people,
+                    min: resp.data.min_people,
+                    price: resp.data.price,
                     guideTotalScore: resp.data.Guide.total_guide_score,
                     guideNScore: resp.data.Guide.n_guide_score,
                     guideJoined: this.moment(resp.data.Guide.User.createdAt.replace(/[-:Z]/g, '')),
@@ -120,7 +126,7 @@ export default class ActivityScreen extends React.Component {
                                     alignItems: 'center',
                                     justifyContent: 'space-around'
                                 }}>
-                                    <Text style={{fontWeight: '600'}}>45€ per person</Text>
+                                    <Text style={{fontWeight: '600'}}>{this.state.price}€ per person</Text>
                                 </View>
                             </View>
                             <View style={styles.info}>
@@ -139,7 +145,7 @@ export default class ActivityScreen extends React.Component {
                                         style={{alignSelf: 'flex-start', margin: 0}}
                                     />
                                     <Text
-                                        style={{marginLeft: 5}}>Between 2 and 4 people</Text>
+                                        style={{marginLeft: 5}}>Between {this.state.min} and {this.state.max} people</Text>
                                 </View>
                                 <View style={styles.quickInfoLine}>
                                     <Icon.Ionicons

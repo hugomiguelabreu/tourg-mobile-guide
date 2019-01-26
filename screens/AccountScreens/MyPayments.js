@@ -43,14 +43,14 @@ export default class MyPayments extends React.Component {
                         <View style={styles.profile}>
                             <List.Section title="Wallet">
                                 <List.Item
-                                    title='Available'
+                                    title='Withdraw available'
                                     description='65,13€'
                                     left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='euro' size={24} /> } />}
                                     onPress = {() => {this.setState({info:true})}}
                                 />
                             </List.Section>
                             <Divider/>
-                            <List.Section title="Bank Account">
+                            <List.Section title="Deposit Bank Account">
                                 <List.Item
                                     title={guideStore.iban}
                                     description={guideStore.swift}
