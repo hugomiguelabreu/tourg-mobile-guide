@@ -136,7 +136,7 @@ export default class MapScreen extends React.Component {
                 Alert.alert('Error while getting location', error.message)
             },
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
-    }
+    };
 
     _setMyLocation = event => {
         const myLocation = event.nativeEvent.coordinate;
@@ -151,7 +151,13 @@ export default class MapScreen extends React.Component {
                         coordinate={{latitude: this.state.usrLat, longitude: this.state.usrLng}}
                 />
             );
-    }
+    };
+
+    _onRegionChangeComplete = (region) => {
+        this.setState({region: {latitude: region.latitude, longitude: region.longitude,
+                latitudeDelta: region.latitudeDelta,
+                longitudeDelta: region.longitudeDelta}})
+    };
 
     render() {
         if(this.state.isLoading == false){
@@ -195,6 +201,7 @@ export default class MapScreen extends React.Component {
                         provider={PROVIDER_GOOGLE}
                         region={this.state.region}
                         onUserLocationChange={this._setMyLocation}
+                        onRegionChangeComplete={this._onRegionChangeComplete}
                         followsUserLocation={true}
                         style={styles.map}
                         showsUserLocation={true}>
