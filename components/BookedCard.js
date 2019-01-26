@@ -14,6 +14,7 @@ export default class BookedCard extends React.Component {
         this.state = {
             bookingId: this.props.id,
             accepted: this.props.accepted,
+            finished: this.props.finished,
             end: this.moment(this.props.bookingDate.replace(/[-:Z]/g, '')).subtract(2, 'h'),
             time: this.moment.duration(this.moment(this.props.bookingDate.replace(/[-:Z]/g, '')).subtract(2, 'h').diff(this.moment(Date.now()))),
         }
@@ -64,6 +65,20 @@ export default class BookedCard extends React.Component {
         );
     }
 
+    _timeOut() {
+        return(
+            <View style={{flex:1, flexDirection:'row', justifyContent:'flex-start', alignItems: 'center'}}>
+                <Icon.Ionicons
+                    name='md-time'
+                    size={16}
+                    color='gray'
+                    style={{ marginRight: 0 }}
+                />
+                <Subheading style={{fontSize:14, color:'gray', marginLeft: 5}}>Timed-out</Subheading>
+            </View>
+        );
+    }
+
     _pending() {
         return(
             <View style={{flex:1, flexDirection:'row', justifyContent:'flex-start', alignItems: 'center'}}>
@@ -106,7 +121,9 @@ export default class BookedCard extends React.Component {
             );
         }
 
-        if(this.state.accepted == true && (this.moment(Date.now()).isBefore(this.state.end))){
+        if(this.state.accepted == true
+            && this.state.finished == false
+            && (this.moment(Date.now()).isBefore(this.moment(this.state.end).add(this.props.duration+60, 'm')))){
             return (
                 <Card.Actions>
                     <View style={{
@@ -122,9 +139,10 @@ export default class BookedCard extends React.Component {
                             alignItems: 'center'
                         }}>
                             <View style={{flex: 1, padding: 5}}>
-                                <TouchableNativeFeedback onPress={() => {this.props.navigation.navigate('Map', {bookingId:this.props.id})}}>
+                                <TouchableNativeFeedback onPress={() => {this.props.navigation.navigate('Map', {bookingId:this.props.id,
+                                    activityId: this.props.activityId, activityDateId: this.props.activityDateId})}}>
                                     <Button mode='contained' style={{backgroundColor: 'orange'}}
-                                            title='Start'>Start tour</Button>
+                                            title='Start'>Start meet</Button>
                                 </TouchableNativeFeedback>
                             </View>
                             <View style={{flex: 1, padding: 5}}>
@@ -186,12 +204,14 @@ export default class BookedCard extends React.Component {
         if(this.state.accepted == null
             && (this.state.time.valueOf() <= 0)){
             return(
-                this._canceled()
+                this._timeOut()
             );
         }
 
-        if(this.state.accepted == true && !(this.moment(Date.now()).isBefore(this.state.end)))
+        if(this.state.finished == true)
             return this._done();
+        else if(this.state.finished == false && !(this.moment(Date.now()).isBefore(this.moment(this.state.end).add(this.props.duration+60, 'm'))))
+            return this._timeOut();
         else if(this.state.accepted == true)
             return this._confirmed()
         else if(this.state.accepted == false)

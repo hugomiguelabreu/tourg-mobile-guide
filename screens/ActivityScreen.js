@@ -23,6 +23,7 @@ export default class ActivityScreen extends React.Component {
             city: '',
             description: '',
             image: '',
+            duration: 0,
             total_activity_score: null,
             n_activity_score: 0,
             region:null,
@@ -72,6 +73,7 @@ export default class ActivityScreen extends React.Component {
                     region:{latitude:resp.data.lat, longitude:resp.data.lng, latitudeDelta: 0.0122, longitudeDelta: 0.0021},
                     guideName: resp.data.Guide.User.name,
                     guideBio: resp.data.Guide.User.bio,
+                    duration: resp.data.duration,
                     guideTotalScore: resp.data.Guide.total_guide_score,
                     guideNScore: resp.data.Guide.n_guide_score,
                     guideJoined: this.moment(resp.data.Guide.User.createdAt.replace(/[-:Z]/g, '')),
@@ -105,7 +107,7 @@ export default class ActivityScreen extends React.Component {
                                     <Icon.Ionicons
                                         name='ios-star'
                                         size={20}
-                                        style={{alignSelf: 'flex-start', margin: 0}}
+                                        style={{alignSelf:'flex-start', margin: 0}}
                                     />
                                 </Title>
                             </Card.Content>
@@ -118,7 +120,7 @@ export default class ActivityScreen extends React.Component {
                                     alignItems: 'center',
                                     justifyContent: 'space-around'
                                 }}>
-                                    <Text>45€ per person</Text>
+                                    <Text style={{fontWeight: '600'}}>45€ per person</Text>
                                 </View>
                             </View>
                             <View style={styles.info}>
@@ -128,7 +130,7 @@ export default class ActivityScreen extends React.Component {
                                         size={14}
                                         style={{alignSelf: 'flex-start', margin: 0}}
                                     />
-                                    <Text style={{marginLeft: 5}}>{this.state.city}, Portugal</Text>
+                                    <Text style={{marginLeft: 5}}>{this.state.city}</Text>
                                 </View>
                                 <View style={styles.quickInfoLine}>
                                     <Icon.Ionicons
@@ -145,8 +147,7 @@ export default class ActivityScreen extends React.Component {
                                         size={14}
                                         style={{alignSelf: 'flex-start', margin: 0}}
                                     />
-                                    <Text style={{marginLeft: 5}}>5 hours
-                                        and 30 minutes</Text>
+                                    <Text style={{marginLeft: 5}}>{this.moment.duration(this.state.duration, 'm').humanize()}</Text>
                                 </View>
                                 <View style={styles.quickInfoLine}>
                                     <Icon.Ionicons

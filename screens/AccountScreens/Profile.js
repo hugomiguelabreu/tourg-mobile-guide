@@ -94,7 +94,7 @@ import { ImagePicker } from 'expo';
             .then((resp) => {
                 //Put user in store
                 console.log(resp.data);
-                guideStore.updateGuide(resp.data);
+                guideStore.updateGuide(resp.data.user);
                 me.setState({successMessage: 'Profile successfully updated'});
             })
             .catch((err) => {

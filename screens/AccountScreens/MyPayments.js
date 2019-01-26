@@ -8,7 +8,7 @@ import {
     View,
     Form, Image, TouchableNativeFeedback
 } from 'react-native';
-import {List, Colors, Title, Snackbar, Divider} from 'react-native-paper';
+import {List, Colors, Title, Snackbar, Divider, Subheading} from 'react-native-paper';
 import {Icon} from 'expo';
 import guideStore from "../../stores/GuideStore";
 
@@ -41,6 +41,15 @@ export default class MyPayments extends React.Component {
                 <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                     <View style={styles.welcomeContainer}>
                         <View style={styles.profile}>
+                            <List.Section title="Wallet">
+                                <List.Item
+                                    title='Available'
+                                    description='65,13€'
+                                    left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='euro' size={24} /> } />}
+                                    onPress = {() => {this.setState({info:true})}}
+                                />
+                            </List.Section>
+                            <Divider/>
                             <List.Section title="Bank Account">
                                 <List.Item
                                     title={guideStore.iban}

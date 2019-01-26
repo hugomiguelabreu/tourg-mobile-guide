@@ -28,6 +28,8 @@ export default class MapScreen extends React.Component {
         super(props);
         this.state = {
             bookingId: this.props.navigation.state.params.bookingId,
+            activityId: this.props.navigation.state.params.activityId,
+            activityDateId: this.props.navigation.state.params.activityDateId,
             isLoading: true,
             userPhoto: null,
             userName: '',
@@ -103,6 +105,22 @@ export default class MapScreen extends React.Component {
             });
     }
 
+    _stopLocation = (activityId, activityDateId) => {
+        let me = this;
+
+        axios.post('/guide/booking/end_tour',
+            {activity_id:activityId, activity_date_id:activityDateId})
+            .then((resp) => {
+                // Set response and loading
+                console.log(resp.data);
+                // Activity ended
+                this.props.navigation.navigate('Home');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     //Function to get user location using gps
     _getLocation = () => {
         let me = this;
@@ -163,9 +181,9 @@ export default class MapScreen extends React.Component {
                                 </View>
                                 <View style={{flex:1, flexDirection:'column'}}>
                                     <View style={{flex: 1, padding: 5, paddingTop:10}}>
-                                        <TouchableNativeFeedback onPress={() => {this.props.navigation.navigate('Home')}}>
+                                        <TouchableNativeFeedback onPress={() => {this._stopLocation(this.state.activityId, this.state.activityDateId)}}>
                                             <Button mode='contained' style={{backgroundColor: 'orange'}}
-                                                    title='Start'>End tour</Button>
+                                                    title='Start'>End meet</Button>
                                         </TouchableNativeFeedback>
                                     </View>
                                 </View>
