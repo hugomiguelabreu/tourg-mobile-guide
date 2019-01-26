@@ -148,8 +148,14 @@ export default class MapScreen extends React.Component {
             return(
                 <Marker title={this.state.userName}
                         description='Current location of client'
-                        coordinate={{latitude: this.state.usrLat, longitude: this.state.usrLng}}
-                />
+                        coordinate={{latitude: this.state.usrLat, longitude: this.state.usrLng}}>
+                    <View style={{width: 38, height: 38}}>
+                        <Image
+                            source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDSnWBOqgvr4hOdTTAhcaNU3KAaWQNn8UHqafmbHY_y39ysZ1', width: 38, height: 38}}
+                            style={{borderColor:'green', borderRadius: 50, borderWidth: 2}}>
+                        </Image>
+                    </View>
+                </Marker>
             );
     };
 
