@@ -24,15 +24,18 @@ export default class HomeScreen extends React.Component {
             bookings: [],
             isLoading: true,
             refreshing: false,
+            balance:0,
         };
     }
 
-    static navigationOptions = {
+    static navigationOptions = ({navigation}) => ({
         headerTitle: <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Title>UPCOMING TOURS</Title></View>,
         headerStyle: {
           marginTop: -Constants.statusBarHeight,
         },
-    };
+        headerRight: <View style={{flex:1, alignItems:'center', justifyContent:'center', marginRight: 15}}><Title>€ {navigation.getParam('balance')}</Title></View>,
+        headerLeft: <View></View>
+    });
 
     componentDidMount() {
         // When the screen is focused again let's fetch new results
@@ -40,8 +43,26 @@ export default class HomeScreen extends React.Component {
             'willFocus',
             payload => {
                 this._getBookings();
+                this._getBalance();
             }
         );
+    }
+
+    _getBalance() {
+        let me = this;
+        this.setState({isLoading: true});
+        axios.get('/guide/balance')
+            .then((resp) => {
+                console.log(resp.data);
+                me.setState({
+                    balance: resp.data.balance,
+                    isLoading:false
+                });
+                me.props.navigation.setParams({ balance: me.state.balance });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     _onRefresh = () => {
@@ -49,6 +70,7 @@ export default class HomeScreen extends React.Component {
         this._getBookings().then(() => {
             this.setState({refreshing: false});
         });
+        this._getBalance();
     }
 
     async _getBookings() {

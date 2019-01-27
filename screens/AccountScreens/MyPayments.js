@@ -11,13 +11,16 @@ import {
 import {List, Colors, Title, Snackbar, Divider, Subheading} from 'react-native-paper';
 import {Icon} from 'expo';
 import guideStore from "../../stores/GuideStore";
+import axios from "axios";
+import LoadingModal from "../../components/LoadingModal";
 
 export default class MyPayments extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
-            info:false
+            info:false,
+            balance: 0
         }
     }
 
@@ -31,60 +34,89 @@ export default class MyPayments extends React.Component {
             'willFocus',
             payload => {
                 this.setState({info: true});
+                this._getBalance();
             }
         );
     }
 
+    _getBalance() {
+        let me = this;
+        this.setState({isLoading: true});
+        axios.get('/guide/balance')
+            .then((resp) => {
+                console.log(resp.data);
+                me.setState({
+                    balance: resp.data.balance,
+                    isLoading:false
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     render() {
-        return (
-            <View style={styles.container}>
-                <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-                    <View style={styles.welcomeContainer}>
-                        <View style={styles.profile}>
-                            <List.Section title="Wallet">
-                                <List.Item
-                                    title='Withdraw available'
-                                    description='65,13€'
-                                    left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='euro' size={24} /> } />}
-                                    onPress = {() => {this.setState({info:true})}}
-                                />
-                            </List.Section>
-                            <Divider/>
-                            <List.Section title="Deposit Bank Account">
-                                <List.Item
-                                    title={guideStore.iban}
-                                    description={guideStore.swift}
-                                    left={() =>  <List.Icon icon={ () => <Icon.FontAwesome name='university' size={24} /> } />}
-                                    onPress = {() => {this.setState({info:true})}}
-                                />
-                            </List.Section>
+        if(!this.state.isLoading) {
+
+            return (
+                <View style={styles.container}>
+                    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+                        <View style={styles.welcomeContainer}>
+                            <View style={styles.profile}>
+                                <List.Section title="Wallet">
+                                    <List.Item
+                                        title='Withdraw available'
+                                        description={this.state.balance + '€'}
+                                        left={() => <List.Icon icon={() => <Icon.FontAwesome name='euro' size={24}/>}/>}
+                                        onPress={() => {
+                                            this.setState({info: true})
+                                        }}
+                                    />
+                                </List.Section>
+                                <Divider/>
+                                <List.Section title="Deposit Bank Account">
+                                    <List.Item
+                                        title={guideStore.iban}
+                                        description={guideStore.swift}
+                                        left={() => <List.Icon
+                                            icon={() => <Icon.FontAwesome name='university' size={24}/>}/>}
+                                        onPress={() => {
+                                            this.setState({info: true})
+                                        }}
+                                    />
+                                </List.Section>
+                            </View>
                         </View>
-                    </View>
-                </ScrollView>
-                <Snackbar
-                    visible={this.state.info}
-                    style={{backgroundColor: 'white'}}
-                    duration={15000}
-                    onDismiss={() => {
-                        this.setState({info: false});
-                    }}
-                    action={{
-                        label: 'Dismiss',
-                        onPress: () => {
+                    </ScrollView>
+                    <Snackbar
+                        visible={this.state.info}
+                        style={{backgroundColor: 'white'}}
+                        duration={15000}
+                        onDismiss={() => {
                             this.setState({info: false});
-                        },
-                    }}>
-                    <Icon.Ionicons
-                        name='md-alert'
-                        style={{color:'grey'}}
-                        size={16}
-                    />
-                    &nbsp;
-                    &nbsp;
-                    <Text style={{color:'black'}}>To manage payments, visit the website.</Text>
-                </Snackbar>
-            </View>
-        );
+                        }}
+                        action={{
+                            label: 'Dismiss',
+                            onPress: () => {
+                                this.setState({info: false});
+                            },
+                        }}>
+                        <Icon.Ionicons
+                            name='md-alert'
+                            style={{color: 'grey'}}
+                            size={16}
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <Text style={{color: 'black'}}>To manage payments, visit the website.</Text>
+                    </Snackbar>
+                </View>
+            );
+        }else{
+            return(
+                <LoadingModal/>
+            );
+        }
     }
 }
 
