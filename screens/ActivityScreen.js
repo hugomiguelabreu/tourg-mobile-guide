@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableNativeFeedback, TouchableOpacity} from "react-native";
-import {Button, Card, Paragraph, Snackbar, Title} from "react-native-paper";
+import {Button, Card, Paragraph, Snackbar, Subheading, Title} from "react-native-paper";
 import {Icon} from "expo";
 import Timeline from "react-native-timeline-listview";
 import MapViewAnimated, {PROVIDER_GOOGLE, Circle, Marker} from "react-native-maps";
@@ -35,12 +35,9 @@ export default class ActivityScreen extends React.Component {
             guideTotalScore: null,
             guideNScore: 0,
             guideJoined: null,
+            highlights: [],
+            lang: [],
         };
-        this.data = [
-            {time: '', title: 'Sé de Braga', description: 'Visitar a Sé de Braga incluindo o tesouro'},
-            {time: '', title: 'Almoço', description: 'Almoçar no centro de Braga'},
-            {time: '', title: 'Museu da Imagem', description: 'Visita ao Museu da Imagem'},
-        ]
     }
 
     static navigationOptions = {
@@ -59,6 +56,29 @@ export default class ActivityScreen extends React.Component {
             }
         );
     }
+
+    _highlights = () => {
+        if(this.state.highlights.length <= 0){
+            return(
+              <View>
+                  <Text style={[styles.aboutText, {paddingLeft:15, marginTop:-15, marginBottom: 15}]}>
+                      No highlights for this activity
+                  </Text>
+              </View>
+            );
+        }else{
+            return(
+                <Timeline
+                    style={{paddingTop: 15, backgroundColor: 'white', marginBottom: 15, marginTop: -15}}
+                    descriptionStyle={{color: 'gray'}}
+                    innerCircle={'dot'}
+                    lineColor='#2E3C58'
+                    circleColor='#349D88'
+                    data={this.state.highlights}
+                />
+            );
+        }
+    };
 
     _fetchActivityData(){
 
@@ -82,6 +102,8 @@ export default class ActivityScreen extends React.Component {
                     price: resp.data.price,
                     guideTotalScore: resp.data.Guide.total_guide_score,
                     guideNScore: resp.data.Guide.n_guide_score,
+                    lang: resp.data.Activity_Languages,
+                    highlights: resp.data.Highlights,
                     guideJoined: this.moment(resp.data.Guide.User.createdAt.replace(/[-:Z]/g, '')),
                     isLoading:false
                 });
@@ -161,7 +183,11 @@ export default class ActivityScreen extends React.Component {
                                         size={14}
                                         style={{alignSelf: 'flex-start', margin: 0}}
                                     />
-                                    <Text style={{marginLeft: 5}}>Portugues</Text>
+                                    <Text style={{marginLeft: 5}}>{
+                                        this.state.lang.length >= 1 ?
+                                        this.state.lang.map(l =>
+                                        (l.language.charAt(0).toUpperCase() + l.language.slice(1))).join(", ") :
+                                        'Not available'}</Text>
                                 </View>
 
                             </View>
@@ -173,14 +199,7 @@ export default class ActivityScreen extends React.Component {
                         <View style={styles.section}>
                             <Title style={styles.sectionTitle}>Highlights</Title>
                         </View>
-                        <Timeline
-                            style={{paddingTop: 15, backgroundColor: 'white', marginBottom: 15, marginTop: -15}}
-                            descriptionStyle={{color: 'gray'}}
-                            innerCircle={'dot'}
-                            lineColor='#2E3C58'
-                            circleColor='#349D88'
-                            data={this.data}
-                        />
+                        {this._highlights()}
                         <View style={styles.section}>
                             <Title style={styles.sectionTitle}>Map</Title>
                         </View>
