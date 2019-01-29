@@ -110,21 +110,15 @@ async function registerForPushNotificationsAsync() {
     console.log(token);
     return;
     // POST the token to your backend server from where you can retrieve it to send push notifications.
-    return fetch(PUSH_ENDPOINT, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            token: {
-                value: token,
-            },
-            user: {
-                username: 'Brent',
-            },
-        }),
-    });
+    // POST the token to your backend server from where you can retrieve it to send push notifications.
+    return axios.post('/guide/update_token',
+        {notification_token: token})
+        .then((resp) => {
+            return resp.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 export default guideStore;
