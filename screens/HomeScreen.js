@@ -33,8 +33,6 @@ export default class HomeScreen extends React.Component {
         headerStyle: {
           marginTop: -Constants.statusBarHeight,
         },
-        headerRight: <View style={{flex:1, alignItems:'center', justifyContent:'center', marginRight: 15}}><Title>€ {navigation.getParam('balance')}</Title></View>,
-        headerLeft: <View></View>
     });
 
     componentDidMount() {
