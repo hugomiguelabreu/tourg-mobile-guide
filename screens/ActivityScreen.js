@@ -32,6 +32,7 @@ export default class ActivityScreen extends React.Component {
             price: 0,
             guideName: '',
             guideBio: '',
+            guidePhoto: '',
             guideTotalScore: null,
             guideNScore: 0,
             guideJoined: null,
@@ -101,6 +102,7 @@ export default class ActivityScreen extends React.Component {
                     price: resp.data.price,
                     guideTotalScore: resp.data.Guide.total_guide_score,
                     guideNScore: resp.data.Guide.n_guide_score,
+                    guidePhoto: resp.data.Guide.User.photo_path,
                     lang: resp.data.Activity_Languages,
                     highlights: resp.data.Highlights,
                     guideJoined: this.moment(resp.data.Guide.User.createdAt.replace(/[-:Z]/g, '')),
@@ -224,7 +226,7 @@ export default class ActivityScreen extends React.Component {
                                         alignItems: 'center'
                                     }}>
                                         <Image style={{width: 54, height: 54}}
-                                               source={{uri: 'https://media.istockphoto.com/photos/confident-businessman-posing-in-the-office-picture-id891418990?k=6&m=891418990&s=612x612&w=0&h=BItvQKG0Wf4Ht3XHPxa2LV0WkCtNjhBjkQv28Dhq2pA='}}/>
+                                               source={{uri: 'http://188.166.173.44/' + this.state.guidePhoto}}/>
                                     </View>
                                     <View style={{
                                         flex: 1,

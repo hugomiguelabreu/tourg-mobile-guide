@@ -148,7 +148,7 @@ export default class MapScreen extends React.Component {
                         coordinate={{latitude: this.state.usrLat, longitude: this.state.usrLng}}>
                     <View style={{width: 38, height: 38}}>
                         <Image
-                            source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDSnWBOqgvr4hOdTTAhcaNU3KAaWQNn8UHqafmbHY_y39ysZ1', width: 38, height: 38}}
+                            source={{uri: 'http://188.166.173.44/' + this.state.userPhoto, width: 38, height: 38}}
                             style={{borderColor:'green', borderRadius: 50, borderWidth: 2}}>
                         </Image>
                     </View>

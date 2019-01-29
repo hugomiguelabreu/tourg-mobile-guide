@@ -117,9 +117,7 @@ import { ImagePicker } from 'expo';
                                     <View style={{flex:0.3, flexDirection:'row', padding:10, alignItems:'center', justifyContent: 'center'}}>
                                         <Image style={{height: 54, width: 54}}
                                                resizeMode = 'cover'
-                                               source={{uri: guideStore.photo_path == null ?
-                                                       'https://media.istockphoto.com/photos/confident-businessman-posing-in-the-office-picture-id891418990?k=6&m=891418990&s=612x612&w=0&h=BItvQKG0Wf4Ht3XHPxa2LV0WkCtNjhBjkQv28Dhq2pA='
-                                                       : guideStore.photo_path}}/>
+                                               source={{uri: guideStore.photo_path}}/>
                                     </View>
                                     <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
                                         <Text style={{padding:10, fontSize:16, fontWeight:'bold'}}>Update profile picture</Text>

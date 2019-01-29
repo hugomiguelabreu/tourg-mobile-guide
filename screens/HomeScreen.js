@@ -108,7 +108,8 @@ export default class HomeScreen extends React.Component {
                                 userJoined={item.User.createdAt}
                                 activityId={item.Activity.id}
                                 activityDateId={item.Activity_Date.id}
-                                userName={item.User.name} navigation={this.props.navigation}
+                                userName={item.User.name} userPhoto={item.User.photo_path}
+                                navigation={this.props.navigation}
                                 bookingDate={item.Activity_Date.timestamp}
                                 finished={item.finished} duration={item.Activity.duration}/>
                 }
