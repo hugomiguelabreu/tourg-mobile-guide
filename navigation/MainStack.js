@@ -73,6 +73,5 @@ AccountStack.navigationOptions = {
 
 export default createBottomTabNavigator({
     HomeStack,
-    SettingsStack,
     AccountStack,
 });

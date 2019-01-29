@@ -33,7 +33,7 @@ class Guide {
         this.iban = data.user.account_number;
         this.swift = data.user.swift;
         this.createdAt = data.user.User.createdAt;
-        this.photo_path = data.user.User.photo_path;
+        this.photo_path = 'http://188.166.173.44/' + data.user.User.photo_path;
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + guideStore.token;
         registerForPushNotificationsAsync();
     }
@@ -45,7 +45,7 @@ class Guide {
     }
 
     @action updatePhoto(uri){
-        this.photo_path = uri;
+        this.photo_path = 'http://188.166.173.44/' + uri;
     }
 
     @action logout(){
@@ -117,7 +117,7 @@ async function registerForPushNotificationsAsync() {
             return resp.data;
         })
         .catch((err) => {
-            console.log(err);
+            console.log(err.response);
         });
 }
 

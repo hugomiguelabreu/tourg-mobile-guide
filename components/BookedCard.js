@@ -111,7 +111,6 @@ export default class BookedCard extends React.Component {
     }
 
     _actions() {
-
         if(this.state.accepted == null &&
             (this.state.time.valueOf() <= 0)){
             return(
@@ -121,8 +120,8 @@ export default class BookedCard extends React.Component {
             );
         }
 
-        if(this.state.accepted == true
-            && this.state.finished == false
+        if(this.state.accepted === true
+            && this.state.finished === false
             && (this.moment(Date.now()).isBefore(this.moment(this.state.end).add(this.props.duration+60, 'm')))){
             return (
                 <Card.Actions>
@@ -178,7 +177,7 @@ export default class BookedCard extends React.Component {
                         }}>
                             <View style={{flex: 1, padding: 5}}>
                                 <TouchableNativeFeedback onPress={() => {
-                                    this.updateActivityState("true")
+                                    this.updateActivityState(true)
                                 }}>
                                     <Button mode='contained' style={{backgroundColor: 'green'}}
                                             title='Accept'>Accept</Button>
@@ -208,13 +207,13 @@ export default class BookedCard extends React.Component {
             );
         }
 
-        if(this.state.finished == true)
+        if(this.state.finished === true)
             return this._done();
-        else if(this.state.finished == false && !(this.moment(Date.now()).isBefore(this.moment(this.state.end).add(this.props.duration+60, 'm'))))
+        else if(this.state.finished === false && !(this.moment(Date.now()).isBefore(this.moment(this.state.end).add(this.props.duration+60, 'm'))))
             return this._timeOut();
-        else if(this.state.accepted == true)
-            return this._confirmed()
-        else if(this.state.accepted == false)
+        else if(this.state.accepted === true)
+            return this._confirmed();
+        else if(this.state.accepted === false)
             return this._canceled();
         else
             return this._pending();
@@ -226,7 +225,7 @@ export default class BookedCard extends React.Component {
             'Do you want to cancel the tour?',
             [
                 {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'Yes', onPress: () => this.updateActivityState("false")},
+                {text: 'Yes', onPress: () => this.updateActivityState(false)},
             ], { cancelable: false });
     }
 
@@ -234,7 +233,7 @@ export default class BookedCard extends React.Component {
         let me = this;
 
         axios.post('/guide/booking/' + this.state.bookingId + '/accept',
-            {state: state})
+            {state: state.toString()})
             .then((resp) => {
                 // Set response and loading
                 me.setState({accepted:state});

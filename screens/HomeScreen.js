@@ -41,7 +41,6 @@ export default class HomeScreen extends React.Component {
             'willFocus',
             payload => {
                 this._getBookings();
-                this._getBalance();
             }
         );
     }
@@ -67,7 +66,6 @@ export default class HomeScreen extends React.Component {
         this._getBookings().then(() => {
             this.setState({refreshing: false});
         });
-        this._getBalance();
     }
 
     async _getBookings() {
@@ -78,6 +76,7 @@ export default class HomeScreen extends React.Component {
 
         await axios.get('/guide/bookings')
             .then((resp) => {
+                console.log(resp.data);
                 // Set response and loading
                 me.setState({isLoading:false, activities: resp.data.Activities});
                 // Clear bookings
@@ -112,7 +111,7 @@ export default class HomeScreen extends React.Component {
                                 activityDateId={item.Activity_Date.id}
                                 userName={item.User.name} navigation={this.props.navigation}
                                 bookingDate={item.Activity_Date.timestamp}
-                                finished={item.finished} duration={item.duration}/>
+                                finished={item.finished} duration={item.Activity.duration}/>
                 }
             />);
         }
