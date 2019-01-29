@@ -76,7 +76,6 @@ export default class HomeScreen extends React.Component {
 
         await axios.get('/guide/bookings')
             .then((resp) => {
-                console.log(resp.data);
                 // Set response and loading
                 me.setState({isLoading:false, activities: resp.data.Activities});
                 // Clear bookings
