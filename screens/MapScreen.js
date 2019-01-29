@@ -74,7 +74,6 @@ export default class MapScreen extends React.Component {
         axios.get('/guide/booking/' + this.state.bookingId)
             .then((resp) => {
                 // Set response and loading
-                console.log(resp.data);
                 me.setState({
                     userName: resp.data.User.name,
                     userJoined: resp.data.User.createdAt,
@@ -94,7 +93,6 @@ export default class MapScreen extends React.Component {
             {lat: lat, lng: lng})
             .then((resp) => {
                 // Set response and loading
-                console.log(resp.data);
                 me.setState({
                     myLat: lat, myLng: lng,
                     usrLat: resp.data.user_lat, usrLng:resp.data.user_lng
@@ -112,7 +110,6 @@ export default class MapScreen extends React.Component {
             {activity_id:activityId, activity_date_id:activityDateId})
             .then((resp) => {
                 // Set response and loading
-                console.log(resp.data);
                 // Activity ended
                 this.props.navigation.navigate('Home');
             })

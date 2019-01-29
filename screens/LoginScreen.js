@@ -37,7 +37,6 @@ export default class LoginScreen extends React.Component {
             {email:email, password: password})
             .then((resp) => {
                 //Put user in store
-                console.log(resp.data);
                 guideStore.login(resp.data);
                 // Navigate to dashboard;
                 me.props.navigation.navigate('Main');

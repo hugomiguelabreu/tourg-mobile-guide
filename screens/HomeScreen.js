@@ -53,7 +53,6 @@ export default class HomeScreen extends React.Component {
         this.setState({isLoading: true});
         axios.get('/guide/balance')
             .then((resp) => {
-                console.log(resp.data);
                 me.setState({
                     balance: resp.data.balance,
                     isLoading:false
@@ -82,7 +81,6 @@ export default class HomeScreen extends React.Component {
         await axios.get('/guide/bookings')
             .then((resp) => {
                 // Set response and loading
-                console.log(resp.data);
                 me.setState({isLoading:false, activities: resp.data.Activities});
                 // Clear bookings
                 this.setState({bookings: []});

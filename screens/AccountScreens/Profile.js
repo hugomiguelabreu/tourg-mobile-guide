@@ -46,7 +46,7 @@ import { ImagePicker } from 'expo';
             mediaTypes: "Images",
             aspect: [3, 4],
         });
-        console.log(pickerResult);
+
         if(pickerResult.cancelled == false)
             guideStore.updatePhoto(pickerResult.uri);
         return;
@@ -93,7 +93,6 @@ import { ImagePicker } from 'expo';
             data)
             .then((resp) => {
                 //Put user in store
-                console.log(resp.data);
                 guideStore.updateGuide(resp.data.user);
                 me.setState({successMessage: 'Profile successfully updated'});
             })

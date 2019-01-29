@@ -86,7 +86,6 @@ export default class ActivityScreen extends React.Component {
         this.setState({isLoading: true});
         axios.get('/activities/' + this.state.activity_id)
             .then((resp) => {
-                console.log(resp.data);
                 me.setState({
                     title: resp.data.title,
                     city: resp.data.city,

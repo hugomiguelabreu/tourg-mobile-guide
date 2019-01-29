@@ -44,7 +44,6 @@ export default class MyPayments extends React.Component {
         this.setState({isLoading: true});
         axios.get('/guide/balance')
             .then((resp) => {
-                console.log(resp.data);
                 me.setState({
                     balance: resp.data.balance,
                     isLoading:false
