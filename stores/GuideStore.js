@@ -108,12 +108,12 @@ async function registerForPushNotificationsAsync() {
     // Get the token that uniquely identifies this device
     let token = await Notifications.getExpoPushTokenAsync();
     console.log(token);
-    return;
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     return axios.post('/guide/update_token',
         {notification_token: token})
         .then((resp) => {
+            console.log(resp.data);
             return resp.data;
         })
         .catch((err) => {

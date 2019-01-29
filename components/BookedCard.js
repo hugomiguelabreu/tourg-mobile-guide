@@ -178,7 +178,7 @@ export default class BookedCard extends React.Component {
                         }}>
                             <View style={{flex: 1, padding: 5}}>
                                 <TouchableNativeFeedback onPress={() => {
-                                    this.updateActivityState(true)
+                                    this.updateActivityState("true")
                                 }}>
                                     <Button mode='contained' style={{backgroundColor: 'green'}}
                                             title='Accept'>Accept</Button>
@@ -226,7 +226,7 @@ export default class BookedCard extends React.Component {
             'Do you want to cancel the tour?',
             [
                 {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'Yes', onPress: () => this.updateActivityState(false)},
+                {text: 'Yes', onPress: () => this.updateActivityState("false")},
             ], { cancelable: false });
     }
 
