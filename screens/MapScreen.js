@@ -121,15 +121,13 @@ export default class MapScreen extends React.Component {
     //Function to get user location using gps
     _getLocation = () => {
         let me = this;
-        this.setState({isLoading: true});
         this.watchID = this.geoLoc.watchPosition(position => {
                 const location = JSON.stringify(position);
-                me.setState({ isLoading:false, region: {latitude: position.coords.latitude, longitude: position.coords.longitude,
+                me.setState({ region: {latitude: position.coords.latitude, longitude: position.coords.longitude,
                         latitudeDelta: 0.0122,
                         longitudeDelta: 0.0021}});
             },
             error => {
-                me.setState({isLoading:false});
                 Alert.alert('Error while getting location', error.message)
             },
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
