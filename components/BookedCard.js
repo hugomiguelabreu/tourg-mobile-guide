@@ -251,7 +251,7 @@ export default class BookedCard extends React.Component {
                             this.props.navigation.navigate('Activity', {activityId: this.props.activityId})
                         }}>
                     <Card style={{flex:1}}>
-                        <Card.Cover style={{height:120}} source={{ uri: 'https://picsum.photos/500/?random' }} />
+                        <Card.Cover style={{height:120}} source={{ uri: 'http://188.166.173.44/' + this.props.activityPhoto }} />
                         <Card.Content style={{flex:1, paddingTop: 5}}>
                             <View style={{flex:1, flexDirection:'row'}}>
                                 <View style={{flex:3, flexDirection:'column'}}>
