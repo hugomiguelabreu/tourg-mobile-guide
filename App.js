@@ -11,7 +11,6 @@ export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
-
   render() {
     const theme = {
         ...DefaultTheme,
@@ -76,7 +75,6 @@ export default class App extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
-
 }
 
 const styles = StyleSheet.create({
