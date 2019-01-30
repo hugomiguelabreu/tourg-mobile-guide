@@ -130,10 +130,9 @@ export default class MapScreen extends React.Component {
         this.setState({isLoading: true});
         this.watchID = this.geoLoc.watchPosition(position => {
             const location = JSON.stringify(position);
-            me.setState({ region: {latitude: position.coords.latitude, longitude: position.coords.longitude,
+            me.setState({isLoading: false, region: {latitude: position.coords.latitude, longitude: position.coords.longitude,
                 latitudeDelta: 0.0122,
                     longitudeDelta: 0.0021}});
-                this.setState({isLoading: false});
             },
     error => {
             this.setState({isLoading: false});
