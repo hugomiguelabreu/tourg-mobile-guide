@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {TextInput, Button, Title, HelperText, Divider, Card, Subheading} from 'react-native-paper';
 import axios from 'axios';
-import {Icon, Constants} from 'expo';
+import {Icon, Constants, Permissions} from 'expo';
 import {Header} from 'react-navigation';
 import MapView, {AnimatedRegion, PROVIDER_GOOGLE} from 'react-native-maps';
 import {MapViewAnimated, Marker} from 'react-native-maps';
@@ -78,7 +78,7 @@ export default class MapScreen extends React.Component {
                     userName: resp.data.User.name,
                     userJoined: resp.data.User.createdAt,
                     userPhoto: resp.data.User.photo_path,
-                    isLoading:false
+                    isLoading: false,
                 });
             })
             .catch((err) => {
@@ -119,39 +119,27 @@ export default class MapScreen extends React.Component {
             });
     }
 
-    async requestPermissions() {
-        try {
-            const granted = await PermissionsAndroid.requestMultiple([
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION
-            ]);
-            if (Object.values(granted).every((x) => x === PermissionsAndroid.RESULTS.GRANTED)) {
-                return true;
-            } else {
-                throw false;
-            }
-        } catch (err) {
-            console.warn(err);
-        }
-    }
-
     //Function to get user location using gps
-    _getLocation = () => {
+    async _getLocation() {
         let me = this;
-        this.requestPermissions().then(() => {
-            this.watchID = this.geoLoc.watchPosition(position => {
-                    const location = JSON.stringify(position);
-                    me.setState({ region: {latitude: position.coords.latitude, longitude: position.coords.longitude,
-                            latitudeDelta: 0.0122,
-                            longitudeDelta: 0.0021}});
-                },
-                error => {
-                    Alert.alert('Error while getting location', error.message)
-                },
-                { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
-        }).catch(() => {
-                Alert.alert('GPS is needed for tourg to work', error.message)
-            });
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            Alert.alert('Location permission was denied');
+            return;
+        }
+        this.setState({isLoading: true});
+        this.watchID = this.geoLoc.watchPosition(position => {
+            const location = JSON.stringify(position);
+            me.setState({ region: {latitude: position.coords.latitude, longitude: position.coords.longitude,
+                latitudeDelta: 0.0122,
+                    longitudeDelta: 0.0021}});
+                this.setState({isLoading: false});
+            },
+    error => {
+            this.setState({isLoading: false});
+            Alert.alert('Error while getting location', error.message)
+        },
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
     };
 
     _setMyLocation = event => {
