@@ -15,7 +15,7 @@ import guideStore from '../../stores/GuideStore';
 import {observer} from "mobx-react/native";
 import axios from "axios";
 import {Icon} from "expo";
-import Colors from "../../constants/Colors";
+import LoadingModal from '../../components/LoadingModal'
 import { ImagePicker } from 'expo';
 
 
@@ -30,6 +30,7 @@ import { ImagePicker } from 'expo';
             name: guideStore.name,
             bio: guideStore.bio,
             photo: guideStore.photo_path,
+            uploading:false,
             errorMessage: '',
             successMessage: '',
         };
@@ -64,12 +65,15 @@ import { ImagePicker } from 'expo';
                     'Content-Type': 'multipart/form-data',
                 }
             };
+            this.setState({uploading:true});
             axios.post("/user/upload_image", formData, config)
                 .then((resp) => {
-                    console.log(resp);
                     guideStore.updatePhoto(resp.data);
+                    this.setState({uploading:false});
                 })
                 .catch((err) => {
+                    this.setState({uploading:false});
+                    this.setState({errorMessage:'Something went wrong uploading the photo'});
                     console.log(err);
                 });
         }
@@ -102,6 +106,13 @@ import { ImagePicker } from 'expo';
                 me.setState({ errorMessage: 'Something went wrong updating the profile' });
                 console.log(err);
             });
+    }
+
+    _load(){
+        if(this.state.uploading)
+            return(
+                <LoadingModal/>
+            );
     }
 
     render() {
@@ -174,6 +185,7 @@ import { ImagePicker } from 'expo';
                             </View>
                         </View>
                     </View>
+                    {this._load()}
                 </ScrollView>
                 </KeyboardAvoidingView>
                 <Snackbar
