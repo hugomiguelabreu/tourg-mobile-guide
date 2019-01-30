@@ -17,8 +17,8 @@ import axios from 'axios';
 export default class LoginScreen extends React.Component {
 
     state = {
-        loginEmail: 'k@mail.com',
-        loginPassword: '123456',
+        loginEmail: '',
+        loginPassword: '',
         loginErrorMessage:'',
     };
 

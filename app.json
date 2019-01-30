@@ -2,7 +2,7 @@
   "expo": {
     "name": "Tourg Guide",
     "description": "Your instant guide",
-    "slug": "tourg",
+    "slug": "tourgGuide",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],
@@ -25,7 +25,7 @@
     },
     "android": {
       "permissions": [ "CAMERA", "READ_INTERNAL_STORAGE", "WRITE_INTERNAL_STORAGE","READ_EXTERNAL_STORAGE","WRITE_EXTERNAL_STORAGE"],
-      "package": "com.tourg.app"
+      "package": "com.tourgguide.app"
     }
   }
 }
