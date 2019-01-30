@@ -125,7 +125,7 @@ export default class MapScreen extends React.Component {
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                 PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION
             ]);
-            if (granted.values().every((x) => x === PermissionsAndroid.RESULTS.GRANTED)) {
+            if (Object.values(granted).every((x) => x === PermissionsAndroid.RESULTS.GRANTED)) {
                 return true;
             } else {
                 throw false;
